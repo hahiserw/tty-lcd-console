@@ -1,0 +1,70 @@
+#!/usr/bin/python3
+
+from sys import argv, exit, stdout
+from PIL import Image
+from re import search
+from base64 import b64encode
+
+SCREEN_WIDTH, SCREEN_HEIGHT = 400, 160
+
+raw_bytes = bytearray()
+
+input_file = argv[1]
+color_threshold = int(argv[2]) if len(argv) > 2 else 32
+
+if not input_file:
+    print('Specify input file')
+    exit(1)
+
+image = Image.open(input_file)
+
+if image.height > SCREEN_HEIGHT or image.width > SCREEN_WIDTH:
+    print('Resize the image to fit in 400x160 screen (PIL resize is ugly..?)')
+    exit(1)
+
+# this method is ugly...
+# # resize it to fit on the screen
+#
+# if image.height > SCREEN_HEIGHT:
+#     nh = SCREEN_HEIGHT
+#     nw = int(image.width * SCREEN_HEIGHT / image.height)
+#
+# if nw > SCREEN_WIDTH:
+#     nh = int(nh * SCREEN_WIDTH / nw)
+#     nw = SCREEN_WIDTH
+#
+# image.thumbnail((nw, nh), Image.ANTIALIAS)
+# # image = image.resize((nw, nh), Image.ANTIALIAS)
+
+image_data = image.getdata()
+
+
+def pixel_bw(v):
+    return v < color_threshold
+
+def pixel_rgb(v):
+    return v[0] < color_threshold
+    return (v[0] + v[1] + v[2]) / 3 < color_threshold
+
+pixel_get = pixel_bw if type(image_data[0]) is int else pixel_rgb
+
+
+j = 7
+b = 0
+for pixel in image_data:
+    if j < 0:
+        j = 7
+        # raw_bytes.append(chr(b))
+        raw_bytes.append(b)
+        # raw_bytes += chr(b)
+        b = 0
+
+    if j >= 0:
+        b |= pixel_get(pixel) << j
+        j = j - 1
+
+if b:
+    raw_bytes.append(b)
+
+raw_bytes_encoded = b64encode(raw_bytes).decode('utf-8')
+stdout.write('\x1b[%s;%s^%s' % (image.width, image.height, raw_bytes_encoded))

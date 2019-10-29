@@ -1,0 +1,29 @@
+[?1h=[?2004h[2;1H▽[6n[2;1H  [1;1H]11;?[1;26r[?12;25h[?12l[?25h[27m[23m[m[H[2J[?25l[26;1H"Projects/console/src/main.c" 337L, 9667C[>c[1;1H[1m[4m/*[m[4m                                                                                                  [m[2;1H[1m * This file is part of the libopencm3 project.
+ *
+ * Copyright (C) 2009 Uwe Hermann <uwe@hermann-uwe.de>
+ * Copyright (C) 2011 Stephen Caudle <scaudle@doceme.com>
+ *
+ * This library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ */[m
+
+[4m#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+#include <libopencm3/stm32/timer.h>[m
+[1m// #include <libopencm3/stm32/dma.h>[m
+[1m[7mProjects/console/src/main.c                                                                         [1;1H[?12l[?25h[?25l[m[26;90HL[1;1H[26;90H [24;1H[1;1H[1m/*[m[1;3H[K[24;1H[1m[4m// #include <libopencm3/stm32/dma.h>[m[4m                                                                [24;1H[?12l[?25h[?25l[m[26;90Hj[24;1H[26;90H [24;1H[1;24r[24;1H
+[1;26r[23;1H[1m// #include <libopencm3/stm32/dma.h>[m[23;37H[K[24;1H[4m#include <libopencm3/stm32/usart.h>                                                                 [m[26;1H[K[24;1H[?12l[?25h[?25l[26;90Hj[24;1H[26;90H [24;1H[1;24r[24;1H
+[1;26r[23;36H[K[24;1H[4m#include <libopencm3/stm32/iwdg.h>                                                                  [24;1H[?12l[?25h[?25l[m[26;90Hj[24;1H[26;90H [24;1H[1;24r[24;1H
+[1;26r[23;35H[K[24;1H[4m#include <libopencm3/cm3/nvic.h>                                                                    [24;1H[?12l[?25h[?25l[m[26;90Hj[24;1H[26;90H [24;1H[1;24r[24;1H
+[1;26r[23;33H[K[24;1H[4m                                                                                                    [24;1H[?12l[?25h[?25l[m[26;90Hj[24;1H[26;90H [24;1H[1;24r[24;1H
+[1;26r[23;1H[K[24;1H[4m#define debugln(message) debug(message "[m[1m[4m\r\n[m[4m")                                                      [24;1H[?12l[?25h[?25l[m[26;90H:[24;1H[26;90H[K[26;1H:[?12l[?25hq[?25l[?12l[?25h[?25l[26;1H[K[26;1H[?2004l[?1l>[?12l[?25h[r

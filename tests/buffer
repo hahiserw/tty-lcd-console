@@ -1,0 +1,13 @@
+#!/bin/bash
+
+t=/dev/ttyUSB0
+
+lines=${1:-13}
+
+for ((i=0; i < lines; i++)); do
+	echo -ne "\r$i  "
+	printf "%$((i+1))s\n" "$i" > $t
+	sleep 0.1s
+done
+
+echo

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+firefox_wid=0x1c00010
+
+update_title() {
+	echo "$title" > /t
+}
+
+old_title=
+
+while true; do
+	title=$(xdotool getwindowname "$firefox_wid" | sed 's/ - Vimperator//')
+	title=$(sed 's/ in downsides of watching snow falling alone//' <<< "$title")
+
+	if [[ $title != "$old_title" ]]; then
+		update_title "$title"
+		old_title=$title
+	fi
+
+	sleep 10s
+done

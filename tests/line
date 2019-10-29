@@ -1,0 +1,49 @@
+#!/bin/bash
+
+t=/dev/ttyUSB0
+#t=$(tty)
+test_file=${1?Specify file}
+
+
+if [[ -n $2 ]]; then
+	shift
+	cmd=$(@)
+else
+	cmd=default_cmd
+	current_line=0
+	max_lines=$(wc -l < $test_file)
+fi
+
+# if [[ $1 == single ]]; then
+# 	read_flags=sn1
+# else
+# 	read_flags=
+# fi
+
+
+# nicely print file continously (wrapping file)
+default_cmd() {
+	get_lines=$1
+
+	# head -n "$current_line" $test_file | tail -n "$get_lines" > "$t"
+	sed -n "$((current_line + 1)),$((current_line + get_lines))p" $test_file > "$t"
+
+	# if current_line is at the end of file get remaining lines from the
+	# beggining of the file
+	if [[ $((get_lines + current_line)) -gt $max_lines ]]; then
+		head -n "$((get_lines + current_line - max_lines))" $test_file > "$t"
+	fi
+
+	current_line=$(((current_line + get_lines) % max_lines))
+}
+
+while read -r$read_flags c; do
+	case $c in
+		[1-9]*) $cmd "$c" ;;
+		0|q) break ;;
+		*)
+			$cmd 1
+			echo -e '\e[2A'
+			;;
+	esac
+done

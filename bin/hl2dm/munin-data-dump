@@ -1,0 +1,42 @@
+#!/bin/bash
+
+scp -P 2202 root@hl2dm:/var/lib/munin/hl2dm/hl2dm-srcds_players_127_0_1_1_2701?-players-g.rrd .
+
+#    11
+# 31 .. 31
+#    11
+bh=31
+bv=11
+
+old=
+
+mw=400
+mh=150
+w=$mw
+h=$mh
+
+if [[ -z $old ]]; then
+	w=$((mw+2*bh))
+	h=$((mh+2*bv))
+fi
+
+#--upper-limit 16
+# TODO remove borders?
+rrdtool graph -w $w -h $h --full-size-mode \
+	--no-legend --grid-dash 1:5 --border 0 \
+	--color BACK#FFFFFF --color MGRID#000000 --color GRID#000000 \
+	--graph-render-mode mono --font-render-mode mono \
+	--start now-1d --end now test2.png \
+	--upper-limit 10 \
+	DEF:dsmain=hl2dm-srcds_players_127_0_1_1_27015-players-g.rrd:42:AVERAGE \
+	DEF:dspuzzle=hl2dm-srcds_players_127_0_1_1_27016-players-g.rrd:42:AVERAGE \
+	DEF:dsjump=hl2dm-srcds_players_127_0_1_1_27017-players-g.rrd:42:AVERAGE \
+	LINE1:dsmain#000000 \
+	LINE1:dspuzzle#000000:dashes=3,3 \
+	LINE1:dsjump#000000:dashes=1,2
+
+if [[ -z $old ]]; then
+	convert test2.png -crop ${mw}x${mh}+$bh+$bv test.jpg
+else
+	convert test2.png test.jpg
+fi

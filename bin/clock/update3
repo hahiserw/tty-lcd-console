@@ -1,0 +1,48 @@
+#!/bin/bash
+
+height=50
+height=70
+height=20
+output=output2.png
+#text=$(date +%H:%M:%S)
+text=$(mpc | head -1)
+
+font=Varela-Round # somehow wide
+font=Aldrich # square
+# font=Alfa-Slab-One # thick
+# font=Atomic-Age # square
+# font=Audiowide # round square, like from a game
+# font=Bruno-Ace # wide, stylish
+# font=Bubbler-One # so thin
+# font=Comfortaa # round
+# font=Courier-New
+# font=Electrolize # stylish, square
+# font=Erica-One # the thickest
+# font=Fjalla-One # normal bold
+# font=Fredoka-One # bolder
+# font=Galindo # semi fancy
+# font=Georgia # distinct digits
+# font=Share-Tech-Mono # pretty normal
+# font=Source-Code-Pro-Light # very thin
+# font=Special-Elite # typewriter
+# font=Squada-One # bold
+# font=Stint-Ultra-Expanded # wide, thin
+
+
+convert \
+	+antialias \
+	-font "$font" \
+	-pointsize "$height" "label:$text" \
+	-monochrome \
+	"$output"
+
+if [[ $1 == console ]]; then
+	t=/dev/ttyUSB0
+	echo -ne '\e[H' > "$t"
+	echo -ne '\e[2J' > "$t"
+	~/Projects/console/bin/img2console "$output" nr > "$t"
+	echo -ne ' \x08 \x08' > "$t"
+	#echo -ne '\e[12A' > "$t"
+else
+	feh "$output"
+fi

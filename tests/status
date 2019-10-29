@@ -1,0 +1,56 @@
+#!/bin/bash
+
+max_width=44
+info_title=test
+
+echo -ne "\e[H"
+echo "+-----------|                        |-----------+"
+echo "|                                                |"
+echo "|  ____________________________________________  |"
+echo "|                                                |"
+echo "|  ...                                           |"
+echo "|                                                |"
+echo "+------------------------------------------------+"
+
+echo -ne "\e[1;15H$info_title"
+
+update_text() {
+	echo -ne "\e[5;4H"
+	printf "%-${max_width}s" "$1"
+}
+
+. "$HOME/bin/bar"
+export bar_width=44
+export bar_empty='_'
+export bar_full='#'
+
+
+update_progress() {
+	echo -ne "\e[3;4H"
+	bar_show "$1"
+}
+
+update_text "progress test"
+
+for ((p=0; p <= 100; p++)); do
+	update_progress "$p"
+	sleep 0.0$((RANDOM%50))s
+done
+
+#while read -r progress text; do
+#	update_progress "$progress"
+#	update_text "$text"
+#	sleep 0.$((RANDOM%10))s
+#done << EOF
+#0 Starting up
+#15 Updating stuff
+#40 Installing stuff
+#55 Removing stuff
+#63 Replacing stuff
+#71 Clearing stuff
+#88 Updating updated stuff
+#93 Finishing up
+#100 Done
+#EOF
+
+echo -ne "\e[8;1H"

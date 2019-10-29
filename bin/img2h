@@ -1,0 +1,41 @@
+#!/usr/bin/python3
+
+from sys import argv, exit
+from PIL import Image
+from re import search
+
+header_data = []
+
+input_file = argv[1]
+
+if not input_file:
+    print('Specify input file')
+    exit(1)
+
+m = search('.*/?([^\.]+).', input_file)
+name = m.group(1)
+
+data = Image.open(input_file).getdata()
+
+def pixel_bw(v):
+    return v == 0
+
+def pixel_rgb(v):
+    return v[0] == 0
+
+pixel_get = pixel_bw if type(data[0]) is int else pixel_rgb
+
+
+j = 7
+b = 0
+for pixel in data:
+    if j < 0:
+        j = 7
+        header_data.append(str(b))
+        b = 0
+
+    if j >= 0:
+        b |= pixel_get(pixel) << j
+        j = j - 1
+
+print('uint8_t image_' + name + '[LCD_WIDTH * LCD_HEIGHT] = {' + (','.join(header_data)) + '};')

@@ -1,0 +1,44 @@
+#!/bin/bash
+
+output=output.png
+
+digit_height=86
+digit_width=55
+margin=28
+
+get_digit_x() {
+	echo $(($1*(digit_width+margin)))
+}
+
+get_digit_geometry() {
+	echo "${digit_width}x${digit_height}+$(get_digit_x "$1")+0"
+}
+
+dh1=$(mktemp --suffix=.png)
+dh0=$(mktemp --suffix=.png)
+dm1=$(mktemp --suffix=.png)
+dm0=$(mktemp --suffix=.png)
+
+dh=$(date +%H)
+dm=$(date +%M)
+dh1v=${dh%?}
+dh0v=${dh#?}
+dm1v=${dm%?}
+dm0v=${dm#?}
+
+convert digits.png -crop "$(get_digit_geometry "$dh1v")" "$dh1"
+convert digits.png -crop "$(get_digit_geometry "$dh0v")" "$dh0"
+convert digits.png -crop "$(get_digit_geometry "$dm1v")" "$dm1"
+convert digits.png -crop "$(get_digit_geometry "$dm0v")" "$dm0"
+
+montage -tile x1 -geometry +10+5 "$dh1" "$dh0" "$dm1" "$dm0" "$output"
+
+if [[ $1 == console ]]; then
+	t=/dev/ttyUSB0
+	~/Projects/console/bin/img2console "$output" nr > "$t"
+	echo -ne '\e[8A' > "$t"
+else
+	feh "$output"
+fi
+
+rm -rf "$dh1" "$dh0" "$dm1" "$dm0"

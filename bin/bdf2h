@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# bdf=${1?Specify bdf file}
+bdf=4x6.bdf
+
+	# awk 'BEGIN{v=""} /^[0-9A-F]0$/{if (length(v) ==v = v"0x"$0","; if (length(v) >= 30) {print v; v=""}}' 
+awk 'BEGIN{v=""} /^[0-9A-F]0$/{v = v"0x"$0","; if (length(v) >= 30) {print v; v=""}}' \
+	"$bdf" > "${bdf%.bdf}.h"

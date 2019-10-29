@@ -1,0 +1,59 @@
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+move
+a
+few
+lines
+down
+because
+buffor
+wraps
+after
+26th
+line
+and
+scrolling
+region
+should
+also
+be
+checked
+in
+this
+case
+[H[2Jone (region 2;11, -4 lines)
+two      |
+three    |
+four     |
+five     |
+six      |
+seven    +
+eight    |
+nine     |
+ten      |
+eleven   |
+twelve
+threerteen[2;11r[4T[r

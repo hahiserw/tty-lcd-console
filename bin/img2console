@@ -1,0 +1,63 @@
+#!/bin/bash
+
+script_path=$0
+script_path=${script_path%/*}
+
+path_input=${1?-Specify input file or '-' (and optional modifier (noconvert|noresize))}
+
+shift
+
+tmptmp=$(mktemp)
+
+if [[ $path_input == '-' ]]; then
+	cat > "$tmptmp"
+
+	# having trouble with printing extension for PNG, eh?
+	# extension=$(file --extension - < "$tmptmp")
+	# extension=${extension#* }
+	# extension=${extension%/*}
+	extension=$(file -i - < "$tmptmp")
+	extension=${extension#* }
+	extension=${extension#*/}
+	extension=${extension%;*}
+else
+	extension=${path_input##*.}
+fi
+
+# echo $tmptmp $extension
+# rm -rf "$tmptmp"
+# exit
+
+temp_input=$(mktemp --suffix ".$extension")
+temp_output=$(mktemp --suffix ".$extension")
+
+if [[ $path_input == '-' ]]; then
+	cat "$tmptmp" > "$temp_input"
+else
+	cat "$path_input" > "$temp_input"
+fi
+
+case $1 in
+	nc|noconvert)
+		cat "$temp_input" > "$temp_output"
+		;;
+
+	nr|noresize)
+		flags=
+		;&
+	*)
+		# flags=${flags-"-resize 400x160"}
+		flags=${flags-"-resize 400x144"}
+		#flags="$flags -white-threshold 80% -black-threshold 98% -monochrome"
+		convert "$temp_input" $flags -monochrome "$temp_output"
+esac
+
+# if [[ $? -eq 0 ]]; then
+	# "$script_path/cencode" "$temp_output" "$@"
+	"$script_path/cencode" "$temp_output"
+# fi
+
+if [[ -n $tmptmp ]]; then
+	rm -ff "$tmptmp"
+fi
+rm -rf "$temp_input" "$temp_output"

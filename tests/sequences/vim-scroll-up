@@ -1,0 +1,25 @@
+[?1h=[?2004h[2;1H▽[6n[2;1H  [1;1H]11;?[1;26r[?12;25h[?12l[?25h[27m[23m[m[H[2J[?25l[26;1H"~/Projects/console/src/main.c" 337L, 9667C[>c[1;1H[1m[4m/*[m[4m                                                                                                  [m[2;1H[1m * This file is part of the libopencm3 project.
+ *
+ * Copyright (C) 2009 Uwe Hermann <uwe@hermann-uwe.de>
+ * Copyright (C) 2011 Stephen Caudle <scaudle@doceme.com>
+ *
+ * This library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ */[m
+
+[4m#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+#include <libopencm3/stm32/timer.h>[m
+[1m// #include <libopencm3/stm32/dma.h>[m
+[1m[7m~/Projects/STM32F3-DISCO/libopencm3-examples/examples/stm32/f4/stm32f4-discovery/console/main.c     [1;1H[?12l[?25h[?25l[m[26;90HG[1;1H[26;90H [24;1H[27m[23m[m[H[2J[1;25Hgpio_toggle(GPIOD, GPIO12);[3;25H[1m// write another character[m[4;25Hconsole_update(*text_read);[6;25Htext_read++;[8;25H[1mif[m (*text_read == [4m0[m) {[9;33H[1m// reset pointers[m[10;33Htext_read = text_write = text_buffer;[11;33H[1m// "clear" buffer[m[12;33H*text_buffer = [4m0[m;[13;25H}[14;25H[1m// will be syncing :\ has to handle erasing properly somehow[15;25H// console_work();[m[16;17H}[18;17Hiwdg_reset();[20;17Hgpio_clear(GPIOD, GPIO12);[21;9H}[23;9H[1mreturn[m [4m0[m;
+[4m}                                                                                                   [m[25;1H[1m[7m~/Projects/STM32F3-DISCO/libopencm3-examples/examples/stm32/f4/stm32f4-discovery/console/main.c     [24;1H[?12l[?25h[?25l[m[26;90HH[24;1H[26;90H [1;25H[4m                        gpio_toggle(GPIOD, GPIO12);                                                 [m[24;1H}[24;2H[K[1;25H[?12l[?25h[?25l[26;90Hk[1;25H[26;90H [1;25H[1;24r[1;1H[L[1;26r[1;1H[4m                [m[1m[4mif[m[4m (*text_read) {                                                                   [m[2;1H                        gpio_toggle(GPIOD, GPIO12);[2;52H[K[1;25H[?12l[?25h[?25l[26;90Hk[1;25H[26;90H [1;25H[1;24r[1;1H[L[1;26r[1;1H[4m                [m[1m[4m// there is another character in buffer[m[4m                                             [m[2;1H                [1mif[m (*text_read) {[2;34H[K[1;25H[?12l[?25h[?25l[26;90Hk[1;25H[26;90H [1;18H[1;24r[1;1H[L[1;26r[1;1H[4m        [m[1m[4mfor[m[4m (;;) {                                                                                  [m[2;1H                [1m// there is another character in buffer[m[2;56H[K[1;18H[?12l[?25h[?25l[26;90H:[1;18H[26;90H[K[26;1H:[?12l[?25hq[?25l[?12l[?25h[?25l[26;1H[K[26;1H[?2004l[?1l>[?12l[?25h[r

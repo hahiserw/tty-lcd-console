@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+# https://www.onsemi.com/pub/Collateral/MC34063A-D.PDF
+
+R1      = 1e3 * 1.0
+Vin     = 5.0
+Vout    = -25.0
+Vsat    = 1.0
+VF      = 0.7
+Vripple = 1.0
+Iout    = 0.002
+
+f       = 1e5 * 1.0
+
+# R1      = 953.0
+# Vin     = 5.0 # 8.0
+# Vout    = -12.0 # -8.0
+# Vsat    = 1.0     # 1 i 8 połączone, to ma być 1 chyba
+# VF      = 0.7     # spadek na diodzie?
+# Vripple = 1.0
+# Iout    = 0.1
+#
+# f       = 1e6 * 1.0
+
+
+ton_div_toff = (abs(Vout) + VF) / (Vin - Vsat)
+ton_and_toff = 1.0 / f
+toff         = ton_and_toff / (ton_div_toff + 1.0)
+ton          = ton_and_toff - toff
+
+Vinmin  = Vin
+Ioutmax = Iout
+tonmax  = ton
+
+CT    = 4.0 * 1e-5 * ton
+Ipksw = 2.0 * Ioutmax * (ton_div_toff +  1.0)
+Rsc   = 0.3 / Ipksw
+Lmin  = ((Vinmin - Vsat) / Ipksw) * tonmax
+CO    = 9.0 * ((Iout * ton) / Vripple)
+
+R2 = (abs(Vout) * 1.25 - 1) * R1
+
+print('Ipksw = {:0.9f}'.format(Ipksw))
+print()
+print('           m  µ  n  p')
+print('CT   = {:0.12f} F'.format(CT))
+print('CO   = {:0.12f} F'.format(CO))
+print('Lmin = {:0.12f} H'.format(Lmin))
+print()
+print('Rsc  = {:12.3f} Ω'.format(Rsc))
+print()
+print('R1   = {:12.3f} Ω'.format(R1))
+print('R2   = {:12.3f} Ω'.format(R2))
+print('Ppos = {:12.3f}%'.format(100 * R1 / (R1 + R2)))

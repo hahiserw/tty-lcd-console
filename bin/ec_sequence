@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Debug escape codes
+
+input_file=${1?Specify input file; "-" for stdin}
+output_file=${2?Specify output file}
+shift
+shift
+
+# term=/dev/pts/21
+# console=/dev/ttyUSB0
+
+IFS=$'\x1b'
+
+# while read -sN$buffer_size c; do
+# while read -rsN1 c; do
+while read -rsd "$IFS" sequence; do
+	if [[ -z $sequence ]]; then
+		continue
+	fi
+
+	sequence=$'\e'$sequence
+
+	echo -ne "$sequence" | hexdump -C
+
+	# for output_file; do
+	# 	echo "$sequence" > "$output_file"
+	# done
+	echo -ne "$sequence" > "$output_file"
+
+	# if [[ $i -lt $n ]]; then
+	# 	:
+	# else
+	# 	read -rsN$n
+	# fi
+	IFS=$'\n' read -rsN1 -u1
+	echo
+done < "$input_file"
+
+# XXX not pringing the last part...
+# and also the last part (read skips data after the last delimeter)
+# sequence=$(< "$input_file")
+# sequence=${sequence##$'\0x1b'}
+#
+# IFS=$'\n' read -rsN1 -u1
+# echo
+#
+# echo -ne "$sequence" | hexdump -C
+# echo -ne "$sequence" > "$output_file"

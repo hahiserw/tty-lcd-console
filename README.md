@@ -3,6 +3,17 @@
 UART console on STM32F4 on monochromatic ITM-400160K1-01 screen (400x160 pixels)
 
 
+![img01](https://github.com/hahiserw/tty-lcd-console/raw/master/doc/IMG_20170401_100511.jpg)
+![img02](https://github.com/hahiserw/tty-lcd-console/raw/master/doc/IMG_20171104_175255.jpg)
+![img03](https://github.com/hahiserw/tty-lcd-console/raw/master/doc/IMG_20171104_175239.jpg)
+
+
+## Youtube demos
+
+[![demo01](http://img.youtube.com/vi/dOt9sj9XrwY/0.jpg)](http://www.youtube.com/watch?v=dOt9sj9XrwY)
+[![demo02](http://img.youtube.com/vi/sOcuAJYhxIo/0.jpg)](http://www.youtube.com/watch?v=sOcuAJYhxIo)
+
+
 ## Hardware features:
 - UART interrupt, DMA (not yet xD)
 - Screen interrupt, DMA (not yet xD)
